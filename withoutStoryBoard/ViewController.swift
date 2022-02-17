@@ -10,19 +10,17 @@ import SnapKit
 
 
 class ViewController: UIViewController {
-
+    let button = UIButton()
+    let slider = UISlider()
+    let label = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-        
-        
-        let label = UILabel()
         view.backgroundColor = .white // 배경색
         view.addSubview(label)
         label.text = "스토리보드가 없어요!" // test를 위해서 출력할 라벨
         label.font = .boldSystemFont(ofSize: 30)
-
         label.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
@@ -32,13 +30,21 @@ class ViewController: UIViewController {
         
     }
     
+    @objc func printLog(_ sender: UIButton) {
+        
+        print("button clicked")
+        button.snp.updateConstraints { make in
+            make.height.equalTo(100)
+        }
+    }
+    
     func configureTestButton() {
-        let button = UIButton()
         button.setTitle("내가 만든 버튼", for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 20)
         button.backgroundColor = .link
         button.layer.cornerRadius = 10
-
+        button.addTarget(self, action: #selector(printLog(_:)), for: .touchUpInside)
+        
         
         view.addSubview(button)
         button.snp.makeConstraints { make in
@@ -50,21 +56,17 @@ class ViewController: UIViewController {
     }
     
     func configureSlider() {
-        let slider = UISlider()
+        
         slider.maximumValue = 10
         slider.minimumValue = 0
         slider.value = 5
         
-        
         view.addSubview(slider)
         slider.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
-            make.bottom.equalToSuperview().offset(-100)
+            make.leading.trailing.equalTo(self.button)
+            make.bottom.equalTo(self.button.snp.top).offset(-10)
         }
     }
-
-
 }
 
 
@@ -90,5 +92,6 @@ struct ViewControllerRepresentable: UIViewControllerRepresentable {
 struct ViewPreview: PreviewProvider {
     static var previews: some View {
         ViewControllerRepresentable()
+.previewInterfaceOrientation(.portrait)
     }
 }
