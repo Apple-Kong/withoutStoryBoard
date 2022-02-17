@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SnapKit
 
 
 class ViewController: UIViewController {
@@ -14,15 +14,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let test = UILabel()
-        view.backgroundColor = .white // 배경색
-        view.addSubview(test)
-        test.text = "스토리보드가 없어요!" // test를 위해서 출력할 라벨
-        test.font = UIFont.systemFont(ofSize: 30)
         
-        test.translatesAutoresizingMaskIntoConstraints = false
-        test.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        test.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        
+        let label = UILabel()
+        view.backgroundColor = .white // 배경색
+        view.addSubview(label)
+        label.text = "스토리보드가 없어요!" // test를 위해서 출력할 라벨
+        label.font = .boldSystemFont(ofSize: 30)
+
+        label.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         
         configureTestButton()
         configureSlider()
@@ -34,38 +37,31 @@ class ViewController: UIViewController {
         button.setTitle("내가 만든 버튼", for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 20)
         button.backgroundColor = .link
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 10
+
         
         view.addSubview(button)
-        
-        let safeArea = view.safeAreaLayoutGuide
-        
-        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        button.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 20).isActive = true
-        button.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -20).isActive = true
-        button.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -20).isActive = true
-        
+        button.snp.makeConstraints { make in
+            make.height.equalTo(50)
+            make.bottom.equalTo(self.view).offset(-30)
+            make.leading.equalTo(self.view).offset(20)
+            make.trailing.equalTo(self.view).offset(-20)
+        }
     }
     
     func configureSlider() {
         let slider = UISlider()
-        slider.translatesAutoresizingMaskIntoConstraints = false
         slider.maximumValue = 10
         slider.minimumValue = 0
         slider.value = 5
         
         
         view.addSubview(slider)
-        
-        let safeArea = view.safeAreaLayoutGuide
-        
-        let leading = NSLayoutConstraint(item: slider, attribute: .leading, relatedBy: .equal, toItem: safeArea, attribute: .leading, multiplier: 1, constant: 20)
-        let trailing = NSLayoutConstraint(item: slider, attribute: .trailing, relatedBy: .equal, toItem: safeArea, attribute: .trailing, multiplier: 1, constant: -20)
-        let bottom = NSLayoutConstraint(item: slider, attribute: .bottom, relatedBy: .equal, toItem: safeArea, attribute: .bottom, multiplier: 1, constant: -100)
-        
-        NSLayoutConstraint.activate([leading, trailing, bottom])
-        
+        slider.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview().offset(-100)
+        }
     }
 
 
