@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     let button = UIButton()
     let slider = UISlider()
     let label = UILabel()
+    let button2 = UIButton()
+    let partialView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +29,8 @@ class ViewController: UIViewController {
         
         configureTestButton()
         configureSlider()
-        
+        configureView()
+        configureButton2()
     }
     
     @objc func printLog(_ sender: UIButton) {
@@ -36,6 +39,34 @@ class ViewController: UIViewController {
         button.snp.updateConstraints { make in
             make.height.equalTo(100)
         }
+    }
+    
+    func configureView() {
+        partialView.backgroundColor = .blue
+        
+        view.addSubview(partialView)
+        partialView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview().offset(-44)
+            make.height.equalTo(244)
+        }
+    }
+    
+    func configureButton2() {
+        button2.imageView?.image = UIImage(systemName: "plus")
+        button2.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        button2.backgroundColor = .link
+        button2.layer.cornerRadius = 140 / 2
+        button2.addTarget(self, action: #selector(printLog(_:)), for: .touchUpInside)
+        
+        
+        view.addSubview(button2)
+        button2.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(self.partialView.snp.bottom).offset(-70)
+            make.height.width.equalTo(140)
+        }
+        
     }
     
     func configureTestButton() {
