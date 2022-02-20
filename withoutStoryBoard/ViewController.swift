@@ -15,23 +15,89 @@ class ViewController: UIViewController {
     let label = UILabel()
     let button2 = UIButton()
     let partialView = UIView()
+    let messageLabel = UILabel()
+    
+    
+    
+    let button3 = UIButton()
+    let button4 = UIButton()
+    let button5 = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = .white // 배경색
-        view.addSubview(label)
-        label.text = "스토리보드가 없어요!" // test를 위해서 출력할 라벨
-        label.font = .boldSystemFont(ofSize: 30)
-        label.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
+        
         
         configureTestButton()
         configureSlider()
         configureView()
         configureButton2()
+        configureUI()
+        configureStackView()
     }
+    
+    
+    
+    func configureUI() {
+        view.addSubview(label)
+        label.text = "공태현" // test를 위해서 출력할 라벨
+        label.font = .boldSystemFont(ofSize: 28)
+        label.snp.makeConstraints { make in
+            make.centerX.equalTo(button2)
+            make.top.equalTo(self.button2.snp.bottom).offset(20)
+        }
+        
+        
+        view.addSubview(messageLabel)
+        
+        messageLabel.text = "상태메세지"
+        messageLabel.textColor = .black
+        
+        messageLabel.font = .systemFont(ofSize: 18)
+        messageLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(label)
+            make.top.equalTo(label.snp.bottom).offset(30)
+        }
+        
+    }
+    
+    func configureStackView() {
+               
+        func customizeButton(make: UIButton) {
+           
+            make.setTitle("wow", for: .normal)
+            make.titleLabel?.font = .boldSystemFont(ofSize: 20)
+            make.backgroundColor = .link
+            make.layer.cornerRadius = 20
+            
+        }
+        
+        customizeButton(make: button3)
+        customizeButton(make: button4)
+        customizeButton(make: button5)
+        
+        let stackView = UIStackView(arrangedSubviews: [button3, button4, button5])
+        
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        
+        view.addSubview(stackView)
+
+        
+        
+        stackView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(slider)
+            make.height.equalTo(50)
+            make.bottom.equalTo(slider.snp.top).offset(-20)
+            make.centerX.equalTo(slider)
+        }
+        
+        
+    }
+    
+
     
     @objc func printLog(_ sender: UIButton) {
         
