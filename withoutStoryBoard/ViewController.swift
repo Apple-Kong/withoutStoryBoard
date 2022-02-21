@@ -9,6 +9,47 @@ import UIKit
 import SnapKit
 
 
+
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifier, for: indexPath) as! CollectionViewCell
+                cell.textlabel.text = String(indexPath.row + 1)
+        
+        cell.backgroundColor = .blue
+        
+        return cell
+    }
+    
+    
+}
+
+//MARK: - 컬렉션 뷰 레이아웃 수정
+extension  ViewController: UICollectionViewDelegateFlowLayout {
+
+    //행
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+
+    //행간 높이
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //사이즈 조정
+
+        let width = 60
+        let height = 60
+        let size = CGSize(width: width, height: height)
+        return size
+    }
+}
+
 class ViewController: UIViewController {
     let button = UIButton()
     let slider = UISlider()
@@ -23,6 +64,9 @@ class ViewController: UIViewController {
     let button4 = UIButton()
     let button5 = UIButton()
     
+    private var collectionView: UICollectionView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -35,8 +79,38 @@ class ViewController: UIViewController {
         configureButton2()
         configureUI()
         configureStackView()
+        
+        setupCollectionView()
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+    
+        self.collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.identifier)
     }
     
+    
+    func setupCollectionView() {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        
+        self.collectionView = cv
+        
+        self.view.addSubview(collectionView)
+            
+        collectionView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(messageLabel.snp.bottom)
+            make.bottom.equalTo(slider.snp.top).offset(-80)
+        }
+        collectionView.backgroundColor = .systemPink
+        
+        self.collectionView = cv
+    }
+
+    
+    @objc func printLog(_ sender: UIButton) {
+        
+
+    }
+
     
     
     func configureUI() {
@@ -98,14 +172,7 @@ class ViewController: UIViewController {
     }
     
 
-    
-    @objc func printLog(_ sender: UIButton) {
-        
-        print("button clicked")
-        button.snp.updateConstraints { make in
-            make.height.equalTo(100)
-        }
-    }
+
     
     func configureView() {
         partialView.backgroundColor = .blue
@@ -166,6 +233,34 @@ class ViewController: UIViewController {
     }
 }
 
+
+
+class CollectionViewCell: UICollectionViewCell {
+    
+    weak var textlabel: UILabel!
+    static let identifier: String = String(describing: CollectionViewCell.self)
+   
+    override init(frame: CGRect) {
+       super.init(frame: frame)
+       
+       let label = UILabel()
+      
+       contentView.addSubview(label)
+        label.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalTo(contentView)
+        }
+        
+       
+       textlabel = label
+       contentView.backgroundColor = .lightGray
+       textlabel.textAlignment = .center
+       
+    }
+   
+    required init?(coder: NSCoder) {
+       fatalError("init(coder:) has not been implemented")
+    }
+}
 
 
 //canvas 사용을 위한 코드
